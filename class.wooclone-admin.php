@@ -42,10 +42,6 @@ class Wooclone_Admin
         }
     }
 
-    public static function wooclone_getSettings()
-    {
-        return get_option('wooclone_settings');
-    }
 
     public static function wooclone_registerSettings()
     {
@@ -84,7 +80,7 @@ class Wooclone_Admin
     }
     
     public static function wooclone_render_settings_field (){
-        echo '<input type= "text" />';
+        echo '<input type= "text" name = "wooclone_api_endpoint" />';
     }
     public static function wooclone_endpointSection_content ( $args){
         
