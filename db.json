@@ -3,7 +3,7 @@
         {
             "isSale": false,
             "id": 1,
-            "unitPrice": 150,
+            "unitPrice": 550,
             "sku": "SKU001",
             "image": "https://via.placeholder.com/600/29153b",
             "isAvailable": true,
@@ -32,6 +32,39 @@
             "description": "Product description",
             "currency": "ZAR",
             "name": "Product 3"
+        },
+         {
+            "isSale": false,
+            "id": 4,
+            "unitPrice": 167,
+            "sku": "SKU001",
+            "image": "https://via.placeholder.com/600/1e71a2",
+            "isAvailable": false,
+            "description": "Product description",
+            "currency": "ZAR",
+            "name": "Product 4"
+        },
+        {
+            "isSale": false,
+            "id": 5,
+            "unitPrice": 120,
+            "sku": "SKU002",
+            "image": "https://via.placeholder.com/600/2cd88b",
+            "isAvailable": true,
+            "description": "Product description",
+            "currency": "ZAR",
+            "name": "Product 5"
+        },
+        {
+            "isSale": false,
+            "id": 6,
+            "unitPrice": 250,
+            "sku": "SKU003",
+            "image": "https://via.placeholder.com/600/c2f7bb",
+            "isAvailable": true,
+            "description": "Product description",
+            "currency": "ZAR",
+            "name": "Product 6"
         }
     ]
 }
