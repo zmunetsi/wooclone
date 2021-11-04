@@ -18,36 +18,9 @@ class Wooclone
     {
         self::$initiated = true;
         self::$end_point = get_option('wooclone_api_endpoint');
-        add_action('page_template', array(__CLASS__, 'wooclone_setProducts'));
-        add_filter('page_template', 'products_page_template');
+        add_action( 'wp_enqueue_scripts', 'wooclone_scripts' );
+        add_filter('page_template', 'wooclone_page_templates');
 
-    }
-
-    public static function wooclone_setProducts()
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => self::$end_point,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        self::$products =  json_decode( $response, true );
-    }
-
-    public static function wooclone_getProducts()
-    {
-
-        return self::$products;
     }
 
 
