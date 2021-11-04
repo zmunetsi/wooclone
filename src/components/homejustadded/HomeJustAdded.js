@@ -76,51 +76,101 @@ function HomeJustAdded(props) {
       }
     ]
   };
+  if(cartItems.length > 0){
 
-  return (
-    <Card
-    >
-      <div className="grid align-items-center">
-        <div className="col-10">
-          <h1 className="lg:text-center text-primary">Just added</h1>
+    return (
+      <Card
+      >
+        <div className="grid align-items-center">
+          <div className="col-10">
+            <h1 className="lg:text-center text-primary">Just added</h1>
+          </div>
+          <div className="col-2">
+            <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
+            <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}><Badge value={ cartItems.length } severity="danger" ></Badge></i> View cart 
+              <i className="pi pi-chevron-right p-2"></i>
+            </a>
+          </div>
         </div>
-        <div className="col-2">
-          <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
-          <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}><Badge value={ cartItems.length } severity="danger" ></Badge></i> View cart 
-            <i className="pi pi-chevron-right p-2"></i>
-          </a>
-        </div>
-      </div>
-      <Slider {...settings}
-        className="pb-4">
-
-        { products.map(product => (
-
-          <div
-            className="col-12 lg:col-3">
-            <img style={{ maxWidth: "100%" }}
-              className="product-image" src= { product.image } alt="product 1" />
-            <div className="grid surface-200 p-0 m-0">
-              <div className="col-12">
-                <h3 className="text-center">{ product.name } </h3>
-              </div>
-              <div className="grid col-12 justify-content-center">
-                <div className="col-6 text-center">
-                  <span className="text-xs">{ product.currency }{ product.unitPrice }</span>
+        <Slider {...settings}
+          className="pb-4">
+  
+          { products.map(product => (
+  
+            <div
+              className="col-12 lg:col-3">
+              <img style={{ maxWidth: "100%" }}
+                className="product-image" src= { product.image } alt="product 1" />
+              <div className="grid surface-200 p-0 m-0">
+                <div className="col-12">
+                  <h3 className="text-center">{ product.name } </h3>
                 </div>
-                <div className="col-6 text-center">
-                  <Button onClick={() => handleButtonAddCart ( product )}label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                <div className="grid col-12 justify-content-center">
+                  <div className="col-6 text-center">
+                    <span className="text-xs">{ product.currency }{ product.unitPrice }</span>
+                  </div>
+                  <div className="col-6 text-center">
+                    <Button onClick={() => handleButtonAddCart ( product )}label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                  </div>
                 </div>
               </div>
             </div>
+  
+          ))}
+  
+  
+        </Slider >
+      </Card >
+    );
+
+  }else{
+    return (
+      <Card
+      >
+        <div className="grid align-items-center">
+          <div className="col-10">
+            <h1 className="lg:text-center text-primary">Just added</h1>
           </div>
+          <div className="col-2">
+            <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
+            <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}></i> View cart 
+              <i className="pi pi-chevron-right p-2"></i>
+            </a>
+          </div>
+        </div>
+        <Slider {...settings}
+          className="pb-4">
+  
+          { products.map(product => (
+  
+            <div
+              className="col-12 lg:col-3">
+              <img style={{ maxWidth: "100%" }}
+                className="product-image" src= { product.image } alt="product 1" />
+              <div className="grid surface-200 p-0 m-0">
+                <div className="col-12">
+                  <h3 className="text-center">{ product.name } </h3>
+                </div>
+                <div className="grid col-12 justify-content-center">
+                  <div className="col-6 text-center">
+                    <span className="text-xs">{ product.currency }{ product.unitPrice }</span>
+                  </div>
+                  <div className="col-6 text-center">
+                    <Button onClick={() => handleButtonAddCart ( product )}label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          ))}
+  
+  
+        </Slider >
+      </Card >
+    );
 
-        ))}
+  }
 
-
-      </Slider >
-    </Card >
-  );
 }
 
 export default HomeJustAdded;
