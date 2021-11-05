@@ -21,6 +21,10 @@
     align-items: flex-end;
 }
 
+.p-orderlist-controls {
+    display: none;
+}
+
 .orderlist-demo .product-item .product-category-icon {
     vertical-align: middle;
     margin-right: .5rem;
@@ -35,12 +39,10 @@
     .orderlist-demo .product-item {
         flex-wrap: wrap;
     }
-
     .orderlist-demo .product-item .image-container {
         width: 100%;
         text-align: center;
     }
-
     .orderlist-demo .product-item img {
         margin: 0 0 1rem 0;
         width: 100px;

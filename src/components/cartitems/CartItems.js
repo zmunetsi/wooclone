@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import ReactDOM from 'react-dom';
+import CartTotal from '../carttotal/CartTotal';
 import { OrderList } from 'primereact/orderlist';
 
 import './CartItems.css';
@@ -9,19 +10,23 @@ import { removeFromCart, getCartItems } from '../../service/CartService';
 function CartItems(props) {
 
   const [cartItems, setCartItems] = useState([])
+  const [totalPrice, setTotalPrice] = useState(0)
 
   useEffect(() => {
 
     const cartItems = getCartItems()
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.unitPrice, 0)
     setCartItems(cartItems)
+    setTotalPrice(totalPrice)
 
   }, [])
 
   const handleButtonRemoveFromCart = useCallback((cartId) => {
 
     let cartItems = removeFromCart(cartId)
-
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.unitPrice, 0)
     setCartItems(cartItems)
+    setTotalPrice(totalPrice)
 
   }, [props.x]);
 
@@ -41,7 +46,7 @@ function CartItems(props) {
           <h6 className="p-mb-2">${item.unitPrice}</h6>
         </div>
         <div className="product-list-action">
-          <i onClick={() => handleButtonRemoveFromCart(item.id)} className="pi pi-times" style={{ 'fontSize': '2em' }}></i>
+          <i onClick={() => handleButtonRemoveFromCart(item.id)} className="pi pi-times" style={{ 'fontSize': '1.2em' }}></i>
         </div>
       </div>
     );
@@ -53,18 +58,15 @@ function CartItems(props) {
       <div className="orderlist-demo">
         <div className="card">
           <div className="grid align-items-center">
-            <div className="col-10">
-
+            <div className="col-8">
+              <OrderList value={cartItems} header="Cart List" listStyle={{ height: 'auto' }} dataKey="id"
+                itemTemplate={itemTemplate} ></OrderList>
             </div>
-            <div className="col-2">
-              <a href="http://localhost/munetsiblog/checkout/" className="text-center no-underline p-button-secondary font-bold">
-                Checkout
-                <i className="pi pi-chevron-right p-2"></i>
-              </a>
+            <div className="col-4">
+              <CartTotal cartItems={cartItems} totalPrice= { totalPrice }></CartTotal>
             </div>
           </div>
-          <OrderList value={cartItems} header="Cart List" listStyle={{ height: 'auto' }} dataKey="id"
-            itemTemplate={itemTemplate} onChange={(e) => setProducts(e.value)}></OrderList>
+
         </div>
       </div>
     );

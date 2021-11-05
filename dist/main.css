@@ -24066,6 +24066,16 @@ body {
 .slick-prev::before, .slick-next::before {
     color: #000;
 }
+.datatable-templating-demo .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.datatable-templating-demo .product-image {
+    width: 100px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
 .orderlist-demo .product-item {
     display: flex;
     align-items: center;
@@ -24089,6 +24099,10 @@ body {
     align-items: flex-end;
 }
 
+.p-orderlist-controls {
+    display: none;
+}
+
 .orderlist-demo .product-item .product-category-icon {
     vertical-align: middle;
     margin-right: .5rem;
@@ -24103,12 +24117,10 @@ body {
     .orderlist-demo .product-item {
         flex-wrap: wrap;
     }
-
     .orderlist-demo .product-item .image-container {
         width: 100%;
         text-align: center;
     }
-
     .orderlist-demo .product-item img {
         margin: 0 0 1rem 0;
         width: 100px;
