@@ -16,27 +16,30 @@ function HomeJustAdded(props) {
 
   const [products, setProducts] = useState([])
   const [cartItems, setCartItems] = useState([])
+  const [cartIds, setCartIds] = useState([])
 
   useEffect(() => {
-    let mounted = true
-    let cartItems =  getCartItems()
+    let cartItems = getCartItems()
+    let cartIds = cartItems.map(item => item.id)
+    setCartItems(cartItems)
+    setCartIds(cartIds)
 
     getProducts()
       .then(items => {
-        if(mounted) {
-          setProducts( items )
-          setCartItems ( cartItems )
-        }
+        setProducts(items)
+
       })
-    return () => mounted = false;
+
   }, [])
 
   const handleButtonAddCart = useCallback((product) => {
 
-    let cartItems = addtoCart( product )
-   
-    setCartItems ( cartItems )
- 
+    let cartItems = addtoCart(product)
+    let cartIds = cartItems.map(item => item.id)
+    setCartItems(cartItems)
+    setCartIds(cartIds)
+
+
   }, [props.x]);
 
 
@@ -76,7 +79,7 @@ function HomeJustAdded(props) {
       }
     ]
   };
-  if(cartItems.length > 0){
+  if (cartItems.length > 0) {
 
     return (
       <Card
@@ -87,43 +90,46 @@ function HomeJustAdded(props) {
           </div>
           <div className="col-2">
             <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
-            <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}><Badge value={ cartItems.length } severity="danger" ></Badge></i> View cart 
+              <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}><Badge value={cartItems.length} severity="danger" ></Badge></i> View cart
               <i className="pi pi-chevron-right p-2"></i>
             </a>
           </div>
         </div>
         <Slider {...settings}
           className="pb-4">
-  
-          { products.map(product => (
-  
+
+          {products.map(product => (
+
             <div
               className="col-12 lg:col-3">
               <img style={{ maxWidth: "100%" }}
-                className="product-image" src= { product.image } alt="product 1" />
+                className="product-image" src={product.image} alt="product 1" />
               <div className="grid surface-200 p-0 m-0">
                 <div className="col-12">
-                  <h3 className="text-center">{ product.name } </h3>
+                  <h3 className="text-center">{product.name} </h3>
                 </div>
                 <div className="grid col-12 justify-content-center">
                   <div className="col-6 text-center">
-                    <span className="text-xs">{ product.currency }{ product.unitPrice }</span>
+                    <span className="text-xs">{product.currency}{product.unitPrice}</span>
                   </div>
                   <div className="col-6 text-center">
-                    <Button onClick={() => handleButtonAddCart ( product )}label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                    {
+                      cartIds.includes(product.id) ? <Button label="Added" className="p-button-xs p-button-outlined p-button-secondary" />
+                        : <Button onClick={() => handleButtonAddCart(product)} label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                    }
                   </div>
                 </div>
               </div>
             </div>
-  
+
           ))}
-  
-  
+
+
         </Slider >
       </Card >
     );
 
-  }else{
+  } else {
     return (
       <Card
       >
@@ -133,38 +139,41 @@ function HomeJustAdded(props) {
           </div>
           <div className="col-2">
             <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
-            <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}></i> View cart 
+              <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}></i> View cart
               <i className="pi pi-chevron-right p-2"></i>
             </a>
           </div>
         </div>
         <Slider {...settings}
           className="pb-4">
-  
-          { products.map(product => (
-  
+
+          {products.map(product => (
+
             <div
               className="col-12 lg:col-3">
               <img style={{ maxWidth: "100%" }}
-                className="product-image" src= { product.image } alt="product 1" />
+                className="product-image" src={product.image} alt="product 1" />
               <div className="grid surface-200 p-0 m-0">
                 <div className="col-12">
-                  <h3 className="text-center">{ product.name } </h3>
+                  <h3 className="text-center">{product.name} </h3>
                 </div>
                 <div className="grid col-12 justify-content-center">
                   <div className="col-6 text-center">
-                    <span className="text-xs">{ product.currency }{ product.unitPrice }</span>
+                    <span className="text-xs">{product.currency}{product.unitPrice}</span>
                   </div>
                   <div className="col-6 text-center">
-                    <Button onClick={() => handleButtonAddCart ( product )}label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                    {
+                      cartIds.includes(product.id) ? <Button label="Added" className="p-button-xs p-button-outlined p-button-secondary" />
+                        : <Button onClick={() => handleButtonAddCart(product)} label="Add to Cart" className="p-button-xs p-button-outlined p-button-primary" />
+                    }
                   </div>
                 </div>
               </div>
             </div>
-  
+
           ))}
-  
-  
+
+
         </Slider >
       </Card >
     );

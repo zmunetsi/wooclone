@@ -69,13 +69,13 @@ function CartItems(props) {
       </div>
     );
 
-  }else{
+  } else {
 
     return (
       <a href="http://localhost/munetsiblog/products/" className="text-center no-underline p-button-secondary font-bold">
-                No items in cart, go shopping
-                <i className="pi pi-chevron-right p-2"></i>
-              </a>
+        No items in cart, go shopping
+        <i className="pi pi-chevron-right p-2"></i>
+      </a>
     );
   }
 
