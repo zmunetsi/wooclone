@@ -14,13 +14,15 @@ import { addtoCart, getCartItems } from '../../service/CartService';
 
 function HomeJustAdded(props) {
 
+  const cartPage = `${ site_url }/cart`
+
   const [products, setProducts] = useState([])
   const [cartItems, setCartItems] = useState([])
   const [cartIds, setCartIds] = useState([])
 
   useEffect(() => {
-    let cartItems = getCartItems()
-    let cartIds = cartItems.map(item => item.id)
+    const cartItems = getCartItems()
+    const cartIds = cartItems.map(item => item.id)
     setCartItems(cartItems)
     setCartIds(cartIds)
 
@@ -34,8 +36,8 @@ function HomeJustAdded(props) {
 
   const handleButtonAddCart = useCallback((product) => {
 
-    let cartItems = addtoCart(product)
-    let cartIds = cartItems.map(item => item.id)
+    const cartItems = addtoCart(product)
+    const cartIds = cartItems.map(item => item.id)
     setCartItems(cartItems)
     setCartIds(cartIds)
 
@@ -89,7 +91,7 @@ function HomeJustAdded(props) {
             <h1 className="lg:text-center text-primary">Just added</h1>
           </div>
           <div className="col-2">
-            <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
+            <a href={ cartPage } className="text-center no-underline p-button-secondary font-bold">
               <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}><Badge value={cartItems.length} severity="danger" ></Badge></i> View cart
               <i className="pi pi-chevron-right p-2"></i>
             </a>
@@ -138,7 +140,7 @@ function HomeJustAdded(props) {
             <h1 className="lg:text-center text-primary">Just added</h1>
           </div>
           <div className="col-2">
-            <a href="http://localhost/munetsiblog/cart/" className="text-center no-underline p-button-secondary font-bold">
+            <a href={ cartPage } className="text-center no-underline p-button-secondary font-bold">
               <i className="pi pi-shopping-cart p-mr-4 p-text-secondary p-overlay-badge" style={{ fontSize: '1.5rem' }}></i> View cart
               <i className="pi pi-chevron-right p-2"></i>
             </a>

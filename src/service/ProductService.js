@@ -1,6 +1,6 @@
  require('/config.js');
 
 export function getProducts() {
-	return fetch('https://my-json-server.typicode.com/zmunetsi/wooclone/products')
+	return fetch(api_endpoint)
 	  .then(data => data.json())
   }

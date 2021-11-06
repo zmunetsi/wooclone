@@ -134,15 +134,23 @@ function wooclone_page_templates( $content )
 }
 
 function wooclone_scripts() {
+    wp_enqueue_script( 'wooclone-config-script', plugins_url( 'config.js', __FILE__ ), array(), WOOCLONE_VERSION, true );
 	wp_enqueue_style( 'wooclone-build-css',plugins_url( '/dist/main.css', __FILE__ ), array(), WOOCLONE_VERSION);
 	wp_enqueue_script( 'wooclone-build-script', plugins_url( '/dist/main.js', __FILE__ ), array(), WOOCLONE_VERSION, true );
-	wp_enqueue_script( 'wooclone-config-script', plugins_url( 'config.js', __FILE__ ), array(), WOOCLONE_VERSION, true );
+	
+    $api_endpoint = get_option('wooclone_api_endpoint');
 
+    wp_localize_script( 'wooclone-config-script', 'scriptParams', $script_params = array(
+        'api_endpoint' => $api_endpoint,
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce' => wp_create_nonce( 'wooclone_nonce' ),
+        'site_url' => site_url(),
+        'plugin_url' => plugins_url( '', __FILE__ ),
+        'version' => WOOCLONE_VERSION,
+        'is_admin' => is_admin(),
+        'is_user_logged_in' => is_user_logged_in(),
 
-    $script_params = array(
-        'api_endpoint' =>  get_option('wooclone_api_endpoint')
-    );
+    ));
 
-    wp_localize_script( 'wooclone-config-script', 'scriptParams', $script_params );
 }
 
