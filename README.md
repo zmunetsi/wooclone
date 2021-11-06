@@ -23,15 +23,20 @@ The following pages will be created automatically during plugin installation:
 
 *   products
 *   cart
-*   chechout
+*   checkout
 
 Create a new menu and add pages to access
 
 *   Install plugin on running wordpress site
 *   Go to admin menu -> wooclone and setup endpoint settings
 
-### Contributions
+### Attributes
 
 The following packages where used in this project: [Primefaces React component](https://primefaces.org/)
+
+### Contributions
+
+Please submit a pull request to contribute to this package.
+
 
 Hooray
