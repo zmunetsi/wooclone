@@ -1,102 +1,264 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import ReactDOM from 'react-dom';
+import CartTotal from '../carttotal/CartTotal';
+import { useFormik } from 'formik';
+import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { Checkbox } from 'primereact/checkbox';
-import { RadioButton } from 'primereact/radiobutton';
-import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Password } from 'primereact/password';
+import { Dropdown } from 'primereact/dropdown';
+import { Divider } from 'primereact/divider';
+import { Button } from 'primereact/button';
 
 import './Checkout.css';
 
-import { getProducts } from '../../service/ProductService';
-import { addtoCart, getCartItems } from '../../service/CartService';
+import { getCartItems } from '../../service/CartService';
 
 function Checkout(props) {
 
-  const [products, setProducts] = useState([])
   const [cartItems, setCartItems] = useState([])
+  const [totalPrice, setTotalPrice] = useState(0)
 
-  const [cities1, setCities1] = useState([]);
-  const [cities2, setCities2] = useState([]);
-  const [city1, setCity1] = useState(null);
-  const [city2, setCity2] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
+  useEffect(() => {
 
-  let states = [
-    { name: 'Arizona', code: 'Arizona' },
-    { name: 'California', value: 'California' },
-    { name: 'Florida', code: 'Florida' },
-    { name: 'Ohio', code: 'Ohio' },
-    { name: 'Washington', code: 'Washington' }
-  ];
+    const cartItems = getCartItems()
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.unitPrice, 0)
+    setCartItems(cartItems)
+    setTotalPrice(totalPrice)
 
-  const onCityChange1 = (e) => {
-    let selectedCities = [...cities1];
+  }, [])
 
-    if (e.checked)
-      selectedCities.push(e.value);
-    else
-      selectedCities.splice(selectedCities.indexOf(e.value), 1);
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      lastname: '',
+      email: '',
+      password: '',
+      streetAddress: '',
+      city: null,
+      accept: false
+    },
+    validate: (data) => {
+      let errors = {};
 
-    setCities1(selectedCities);
-  }
+      if (!data.name) {
+        errors.name = 'Name is required.';
+      }
 
-  const onCityChange2 = (e) => {
-    let selectedCities = [...cities2];
+      if (!data.email) {
+        errors.email = 'Email is required.';
+      }
+      else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
+        errors.email = 'Invalid email address. E.g. example@email.com';
+      }
 
-    if (e.checked)
-      selectedCities.push(e.value);
-    else
-      selectedCities.splice(selectedCities.indexOf(e.value), 1);
+      if (!data.password) {
+        errors.password = 'Password is required.';
+      }
 
-    setCities2(selectedCities);
-  }
+      if (!data.accept) {
+        errors.accept = 'You need to agree to the terms and conditions.';
+      }
 
-  const onStateChange = (e) => {
-    setSelectedState(e.value);
-  }
+      return errors;
+    },
+    onSubmit: (data) => {
+      setFormData(data);
+      setShowMessage(true);
 
-  return (
-    <div>
+      formik.resetForm();
+    }
+  });
 
-      <h5>Checkout</h5>
-      <form action = "https://sandbox.payfast.co.za" className="p-fluid">
-        <div className="p-fluid p-formgrid p-grid">
-          <div className="p-field p-col-12 p-md-6">
-            <label htmlFor="firstname6">Firstname</label>
-            <InputText id="firstname6" type="text" />
+  const cities = [
+
+    { name: "Johannesburg", code: "JHB" },
+    { name: "Cape Town", code: "CPT" },
+    { name: "Durban", code: "DUR" },
+    { name: "East London", code: "EAL" },
+    { name: "Port Elizabeth", code: "PLZ" },
+    { name: "Pretoria", code: "PRY" },
+  ]
+  const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+  const getFormErrorMessage = (name) => {
+    return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+  };
+
+  const passwordHeader = <h6>Pick a password</h6>;
+  const passwordFooter = (
+    <React.Fragment>
+      <Divider />
+      <p className="p-mt-2">Suggestions</p>
+      <ul className="p-pl-2 p-ml-2 p-mt-0" style={{ lineHeight: '1.5' }}>
+        <li>At least one lowercase</li>
+        <li>At least one uppercase</li>
+        <li>At least one numeric</li>
+        <li>Minimum 8 characters</li>
+      </ul>
+    </React.Fragment>
+  );
+
+
+  if (true) {
+
+    return (
+      <div className="checkout-form">
+        <div className="grid">
+          <div className="col-12 lg:col-8">
+            <div className="p-d-flex p-jc-center">
+              <div className="card">
+                <h5 className="p-text-center">Checkout</h5>
+                <form onSubmit={formik.handleSubmit} className="p-fluid">
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputText id="name" name="name" value={formik.values.name} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
+                      <label htmlFor="name" className={classNames({ 'p-error': isFormFieldValid('name') })}>Name*</label>
+                    </span>
+                    {getFormErrorMessage('name')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputText id="lastname" name="lastname" value={formik.values.lastname} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('lastname') })} />
+                      <label htmlFor="lastname" className={classNames({ 'p-error': isFormFieldValid('lastname') })}>Last Name*</label>
+                    </span>
+                    {getFormErrorMessage('lastname')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label p-input-icon-right">
+                      <i className="pi pi-envelope" />
+                      <InputText id="email" name="email" value={formik.values.email} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid('email') })} />
+                      <label htmlFor="email" className={classNames({ 'p-error': isFormFieldValid('email') })}>Email*</label>
+                    </span>
+                    {getFormErrorMessage('email')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <Password id="password" name="password" value={formik.values.password} onChange={formik.handleChange} toggleMask
+                        className={classNames({ 'p-invalid': isFormFieldValid('password') })} header={passwordHeader} footer={passwordFooter} />
+                      <label htmlFor="password" className={classNames({ 'p-error': isFormFieldValid('password') })}>Password*</label>
+                    </span>
+                    {getFormErrorMessage('password')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputTextarea id="street-address" name="streetAddress" value={formik.values.streetAddress} rows={3} cols={30} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('streetAddress') })} />
+                      <label htmlFor="street-address" className={classNames({ 'p-error': isFormFieldValid('streetAddress') })}>Street Address*</label>
+                    </span>
+                    {getFormErrorMessage('streetAddress')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <Dropdown id="city" name="city" value={formik.values.city} onChange={formik.handleChange} options={cities} optionLabel="name" />
+                      <label htmlFor="city">City</label>
+                    </span>
+                  </div>
+
+                  <Button type="submit" label="Pay Now" className="primary p-mt-2" />
+                </form>
+              </div>
+            </div>
           </div>
-          <div className="p-field p-col-12 p-md-6">
-            <label htmlFor="lastname6">Lastname</label>
-            <InputText id="lastname6" type="text" />
-          </div>
-          <div className="p-field p-col-12">
-            <label htmlFor="address">Address</label>
-            <InputTextarea id="address" type="text" rows="4" />
-          </div>
-          <div className="p-field p-col-12 p-md-6">
-            <label htmlFor="city">City</label>
-            <InputText id="city" type="text" />
-          </div>
-          <div className="p-field p-col-12 p-md-3">
-            <label htmlFor="state">State</label>
-            <Dropdown inputId="state" value={selectedState} options={states} onChange={onStateChange} placeholder="Select" optionLabel="name" />
-          </div>
-          <div className="p-field p-col-12 p-md-3">
-            <label htmlFor="zip">Zip</label>
-            <InputText id="zip" type="text" />
+          <div className="col-12 lg:col-4">
+            <div className="p-d-flex p-jc-center">
+              <div className="card">
+                <h5 className="p-text-center">Already have an account | Login</h5>
+                <form onSubmit={formik.handleSubmit} className="p-fluid">
+
+                  <div className="p-field">
+                    <span className="p-float-label p-input-icon-right">
+                      <i className="pi pi-envelope" />
+                      <InputText id="email" name="email" value={formik.values.email} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid('email') })} />
+                      <label htmlFor="email" className={classNames({ 'p-error': isFormFieldValid('email') })}>Email*</label>
+                    </span>
+                    {getFormErrorMessage('email')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <Password id="password" name="password" value={formik.values.password} onChange={formik.handleChange} toggleMask
+                        className={classNames({ 'p-invalid': isFormFieldValid('password') })} header={passwordHeader} footer={passwordFooter} />
+                      <label htmlFor="password" className={classNames({ 'p-error': isFormFieldValid('password') })}>Password*</label>
+                    </span>
+                    {getFormErrorMessage('password')}
+                  </div>
+                  <Button type="submit" label="Login" className="p-button-secondary p-mt-2" />
+                </form>
+              </div>
+            </div>
+            <React.Fragment>
+              <Divider />
+              <CartTotal title='Your Order' cartItems={cartItems} title='Your Order' totalPrice= { totalPrice }></CartTotal>
+            </React.Fragment>
           </div>
         </div>
+      </div>
+    );
 
-        <div className="p-field p-mt-3">
-          <Button type="submit" label="Checkout" />
+  } else {
+
+    return (
+      <div className="checkout-form">
+        <div className="grid align-items-center">
+          <div className="col-12 lg:col-8">
+            <div className="p-d-flex p-jc-center">
+              <div className="card">
+                <h5 className="p-text-center">Checkout</h5>
+                <form onSubmit={formik.handleSubmit} className="p-fluid">
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputText id="name" name="name" value={formik.values.name} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
+                      <label htmlFor="name" className={classNames({ 'p-error': isFormFieldValid('name') })}>Name*</label>
+                    </span>
+                    {getFormErrorMessage('name')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputText id="lastname" name="lastname" value={formik.values.lastname} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('lastname') })} />
+                      <label htmlFor="lastname" className={classNames({ 'p-error': isFormFieldValid('lastname') })}>Last Name*</label>
+                    </span>
+                    {getFormErrorMessage('lastname')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label p-input-icon-right">
+                      <i className="pi pi-envelope" />
+                      <InputText id="email" name="email" value={formik.values.email} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid('email') })} />
+                      <label htmlFor="email" className={classNames({ 'p-error': isFormFieldValid('email') })}>Email*</label>
+                    </span>
+                    {getFormErrorMessage('email')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <Password id="password" name="password" value={formik.values.password} onChange={formik.handleChange} toggleMask
+                        className={classNames({ 'p-invalid': isFormFieldValid('password') })} header={passwordHeader} footer={passwordFooter} />
+                      <label htmlFor="password" className={classNames({ 'p-error': isFormFieldValid('password') })}>Password*</label>
+                    </span>
+                    {getFormErrorMessage('password')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputTextarea id="street-address" name="streetAddress" value={formik.values.streetAddress} rows={3} cols={30} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('streetAddress') })} />
+                      <label htmlFor="street-address" className={classNames({ 'p-error': isFormFieldValid('streetAddress') })}>Street Address*</label>
+                    </span>
+                    {getFormErrorMessage('streetAddress')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <Dropdown id="city" name="city" value={formik.values.city} onChange={formik.handleChange} options={cities} optionLabel="name" />
+                      <label htmlFor="city">City</label>
+                    </span>
+                  </div>
+
+                  <Button type="submit" label="Pay Now" className="p-mt-2" />
+                </form>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 lg:col-4">
+            <CartTotal cartItems={cartItems} title='Your Order' totalPrice={totalPrice}></CartTotal>
+          </div>
         </div>
-
-      </form>
-
-    </div>
-  )
+      </div>
+    );
+  }
 
 
 }

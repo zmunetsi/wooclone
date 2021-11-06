@@ -58,12 +58,22 @@ function CartItems(props) {
       <div className="orderlist-demo">
         <div className="card">
           <div className="grid align-items-center">
-            <div className="col-8">
+            <div className="col-12 lg:col-8">
               <OrderList value={cartItems} header="Cart List" listStyle={{ height: 'auto' }} dataKey="id"
                 itemTemplate={itemTemplate} ></OrderList>
             </div>
-            <div className="col-4">
-              <CartTotal cartItems={cartItems} totalPrice= { totalPrice }></CartTotal>
+            <div className="col-12 lg:col-4">
+              <CartTotal cartItems={cartItems} title='Cart Total' totalPrice={totalPrice}></CartTotal>
+              <React.Fragment>
+                <div className="grid align-items-center">
+                  <div className="col-12">
+                    <a href="http://localhost/munetsiblog/checkout/" className="text-center no-underline p-button-secondary font-bold">
+                      Proceed to checkout
+                      <i className="pi pi-chevron-right p-2"></i>
+                    </a>
+                  </div>
+                </div>
+              </React.Fragment>
             </div>
           </div>
 
