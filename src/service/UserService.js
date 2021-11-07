@@ -29,7 +29,18 @@ export function logout() {
 }
 
 export function register() {
-	return fetch(api_endpoint)
+	let formData = new FormData();
+	formData.append('firstname', data.firstname)
+	formData.append('username', data.username)
+	formData.append('password', data.password)
+	formData.append('action', 'user_register')
+
+	return fetch(ajax_url,
+		{
+			method: 'POST',
+			body: formData
+
+		})
 		.then(data => data.json())
 }
 

@@ -180,7 +180,7 @@ function wooclone_ajax_user_login()
 function wooclone_ajax_user_logout()
 {
     $user_logout = wp_logout();
-    if (is_wp_error( $user_logout )) {
+    if (is_wp_error($user_logout)) {
         echo json_encode(array('loggedout' => false, 'message' => __('Logout failed.')));
     } else {
         echo json_encode(array('loggedout' => true, 'message' => __('Logout successful, redirecting...')));
@@ -192,15 +192,18 @@ function wooclone_ajax_user_logout()
 function wooclone_ajax_user_register()
 {
     $info = array();
-    $info['user_login'] = $_POST['username'];
-    $info['user_password'] = $_POST['password'];
-    $info['remember'] = true;
+    $info['first_name'] = sanitize_text_field($_POST['firstname']);
+    $info['user_login'] = sanitize_text_field($_POST['username']);
+    $info['user_pass'] = sanitize_text_field($_POST['password']);
+    $info['user_email'] = sanitize_email($_POST['email']);
 
-    $user_signon = wp_signon($info, false);
-    if (is_wp_error($user_signon)) {
-        echo json_encode(array('loggedin' => false, 'message' => __('Wrong username or password.')));
+    // Register the user
+    $user_register = wp_insert_user($info, false);
+
+    if (is_wp_error($user_register)) {
+        echo json_encode(array('registered' => false, 'message' => __('Registration Failed.')));
     } else {
-        echo json_encode(array('loggedin' => true, 'message' => __('Login successful, redirecting...')));
+        echo json_encode(array('registered' => true, 'message' => __('Registration successful, redirecting...')));
     }
 
     die();

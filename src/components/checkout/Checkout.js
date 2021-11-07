@@ -69,6 +69,7 @@ function Checkout(props) {
     initialValues: {
       name: '',
       lastname: '',
+      username: '',
       email: '',
       password: '',
       streetAddress: '',
@@ -80,6 +81,10 @@ function Checkout(props) {
 
       if (!data.name) {
         errors.name = 'Name is required.';
+      }
+
+      if (!data.username) {
+        errors.name = 'Username is required.';
       }
 
       if (!data.email) {
@@ -102,9 +107,13 @@ function Checkout(props) {
     onSubmit: (data) => {
       setFormData(data);
       setShowMessage(true);
-      register(data, (response) => {
-        if (response.status === 200) {
-          props.history.push('/')
+      register(data).then(response => {
+        if (response.registered) {
+          setUseStatus(true)
+          setUsername( data.username )
+          showSuccess('Success, User registered.')
+        } else {
+          showWarn('Registration failed.')
         }
       })
 
@@ -195,10 +204,10 @@ function Checkout(props) {
             <div className="p-d-flex p-jc-center">
               <div className="card">
                 <h5 className="p-text-center">Welcome {username} | 
-                <button onClick={ handleLogout } className="text-center p-button p-button-text font-bold">
+                <a href ="javascript:void(0);" onClick={ handleLogout } className="text-center no-underline p-button-secondary font-bold">
                       Logout
                       <i className="pi pi-chevron-right p-2"></i>
-                    </button>
+                    </a>
                  </h5>
                 <Image src={payfastImage} alt="payfast-image" />
                 <form onSubmit={formik.handleSubmit} className="p-fluid">
