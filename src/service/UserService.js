@@ -1,27 +1,35 @@
 require('/config.js');
 
 export function login(data) {
-  let formData = new FormData();
-  formData.append('username', data.username)
-  formData.append('password', data.password)
-  formData.append('action', 'user_login')
+	let formData = new FormData();
+	formData.append('username', data.username)
+	formData.append('password', data.password)
+	formData.append('action', 'user_login')
 
-	return fetch( ajax_url ,
+	return fetch(ajax_url,
 		{
 			method: 'POST',
 			body: formData
-			
-		} )
-	  .then(data => data.json())
-  }
 
-  export function Logout() {
-	return fetch(api_endpoint)
-	  .then(data => data.json())
-  }
+		})
+		.then(data => data.json())
+}
 
-  export function register() {
+export function logout() {
+	let formData = new FormData();
+	formData.append('action', 'user_logout')
+
+	return fetch(ajax_url,
+		{
+			method: 'POST',
+			body: formData
+
+		})
+		.then(data => data.json())
+}
+
+export function register() {
 	return fetch(api_endpoint)
-	  .then(data => data.json())
-  }
+		.then(data => data.json())
+}
 

@@ -11,8 +11,8 @@ import { removeFromCart, getCartItems } from '../../service/CartService';
 function CartItems(props) {
 
   const toast = useRef(null);
-  const checkOutPage = `${ site_url }/checkout`
-  const productPage = `${ site_url }/products`
+  const checkOutPage = `${site_url}/checkout`
+  const productPage = `${site_url}/products`
 
   const [cartItems, setCartItems] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
@@ -27,27 +27,27 @@ function CartItems(props) {
 
   }, [])
 
-  const showSuccess = (message, detail ) => {
+  const showSuccess = (message, detail) => {
     toast.current.show({ severity: 'success', summary: message, detail: detail, life: 3000 });
   }
 
-  const showWarn = ( message, detail ) => {
+  const showWarn = (message, detail) => {
     toast.current.show({ severity: 'warn', summary: message, detail: detail, life: 3000 });
   }
 
   const handleButtonRemoveFromCart = useCallback((cartId) => {
 
     const cartItems = removeFromCart(cartId)
-   
+
     const totalPrice = cartItems.reduce((acc, item) => acc + item.unitPrice, 0)
     setCartItems(cartItems)
     setTotalPrice(totalPrice)
-    
-    if(cartItems){
-      showSuccess( 'Product removed' )
-     }else{
-       showWarn('Sorry, things did not work as expected.')
-     }
+
+    if (cartItems) {
+      showSuccess('Product removed')
+    } else {
+      showWarn('Sorry, things did not work as expected.')
+    }
 
   }, [props.x]);
 
@@ -89,7 +89,7 @@ function CartItems(props) {
               <React.Fragment>
                 <div className="grid align-items-center">
                   <div className="col-12">
-                    <a href={ checkOutPage } className="text-center no-underline p-button-secondary font-bold">
+                    <a href={checkOutPage} className="text-center no-underline p-button-secondary font-bold">
                       Proceed to checkout
                       <i className="pi pi-chevron-right p-2"></i>
                     </a>
@@ -106,7 +106,7 @@ function CartItems(props) {
   } else {
 
     return (
-      <a href={ productPage } className="text-center no-underline p-button-secondary font-bold">
+      <a href={productPage} className="text-center no-underline p-button-secondary font-bold">
         No items in cart, go shopping
         <i className="pi pi-chevron-right p-2"></i>
       </a>

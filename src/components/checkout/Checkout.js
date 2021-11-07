@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState,useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import CartTotal from '../carttotal/CartTotal';
 import { useFormik } from 'formik';
@@ -14,7 +14,7 @@ import { Toast } from 'primereact/toast';
 
 import './Checkout.css';
 
-import { getCartItems } from '../../service/CartService';
+import { getCartItems, removeFromCart } from '../../service/CartService';
 import { login, logout, register } from '../../service/UserService';
 
 function Checkout(props) {
@@ -48,6 +48,22 @@ function Checkout(props) {
     setUsername(user_name)
 
   }, [])
+
+  const handleLogout = useCallback(( ) => {
+
+    logout().then(response => {
+      console.log(response )
+      if (response.loggedout) {
+        setUseStatus(false)
+        showSuccess('You are now logged out.')
+      } else {
+        showWarn('OOps something went wrong.')
+      }
+    })
+
+   
+
+  }, [props.x]);
 
   const formik = useFormik({
     initialValues: {
@@ -178,7 +194,12 @@ function Checkout(props) {
           <div className="col-12 lg:col-6">
             <div className="p-d-flex p-jc-center">
               <div className="card">
-                <h5 className="p-text-center">Welcome | {username} </h5>
+                <h5 className="p-text-center">Welcome {username} | 
+                <button onClick={ handleLogout } className="text-center p-button p-button-text font-bold">
+                      Logout
+                      <i className="pi pi-chevron-right p-2"></i>
+                    </button>
+                 </h5>
                 <Image src={payfastImage} alt="payfast-image" />
                 <form onSubmit={formik.handleSubmit} className="p-fluid">
                   <InputText hidden id="name" name="name" value={formik.values.name} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />

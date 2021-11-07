@@ -116,38 +116,39 @@ function wooclone_plugin_deactivation()
     global $wpdb;
 }
 
-function wooclone_page_templates( $content )
+function wooclone_page_templates($content)
 {
-   
-    if ( is_page( 'products' ) ) {
-        $content = dirname( __FILE__ ) . '/templates/products-template.php';
-    }elseif( is_page( 'cart' ) ){
-        $content = dirname( __FILE__ ) . '/templates/cart-template.php';
-    }elseif ( is_page( 'checkout' ) ){
 
-        $content = dirname( __FILE__ ) . '/templates/checkout-template.php';
-    }elseif ( is_page( 'account' ) ){
-        $content = dirname( __FILE__ ) . '/templates/account-template.php';
+    if (is_page('products')) {
+        $content = dirname(__FILE__) . '/templates/products-template.php';
+    } elseif (is_page('cart')) {
+        $content = dirname(__FILE__) . '/templates/cart-template.php';
+    } elseif (is_page('checkout')) {
+
+        $content = dirname(__FILE__) . '/templates/checkout-template.php';
+    } elseif (is_page('account')) {
+        $content = dirname(__FILE__) . '/templates/account-template.php';
     }
 
     return $content;
 }
 
-function wooclone_scripts() {
-    wp_enqueue_script( 'wooclone-config-script', plugins_url( 'config.js', __FILE__ ), array(), WOOCLONE_VERSION, true );
-	wp_enqueue_style( 'wooclone-build-css',plugins_url( '/dist/main.css', __FILE__ ), array(), WOOCLONE_VERSION);
-	wp_enqueue_script( 'wooclone-build-script', plugins_url( '/dist/main.js', __FILE__ ), array(), WOOCLONE_VERSION, true );
-	
+function wooclone_scripts()
+{
+    wp_enqueue_script('wooclone-config-script', plugins_url('config.js', __FILE__), array(), WOOCLONE_VERSION, true);
+    wp_enqueue_style('wooclone-build-css', plugins_url('/dist/main.css', __FILE__), array(), WOOCLONE_VERSION);
+    wp_enqueue_script('wooclone-build-script', plugins_url('/dist/main.js', __FILE__), array(), WOOCLONE_VERSION, true);
+
     $api_endpoint = get_option('wooclone_api_endpoint');
     $current_user = wp_get_current_user();
     $user_firstname = $current_user->user_login;
 
-    wp_localize_script( 'wooclone-config-script', 'scriptParams', $script_params = array(
+    wp_localize_script('wooclone-config-script', 'scriptParams', $script_params = array(
         'api_endpoint' => $api_endpoint,
-        'ajax_url' => admin_url( 'admin-ajax.php' ),
-        'nonce' => wp_create_nonce( 'wooclone_nonce' ),
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('wooclone_nonce'),
         'site_url' => site_url(),
-        'plugin_url' => plugins_url( '', __FILE__ ),
+        'plugin_url' => plugins_url('', __FILE__),
         'version' => WOOCLONE_VERSION,
         'is_admin' => is_admin(),
         'is_user_logged_in' => is_user_logged_in(),
@@ -157,33 +158,50 @@ function wooclone_scripts() {
 
 }
 
-function wooclone_ajax_user_login() {
+function wooclone_ajax_user_login()
+{
 
     $info = array();
     $info['user_login'] = $_POST['username'];
     $info['user_password'] = $_POST['password'];
     $info['remember'] = true;
 
-    $user_signon = wp_signon( $info, false );
-    if ( is_wp_error($user_signon) ){
-        echo json_encode(array('loggedin'=>false, 'message'=>__('Wrong username or password.')));
+    $user_signon = wp_signon($info, false);
+    if (is_wp_error($user_signon)) {
+        echo json_encode(array('loggedin' => false, 'message' => __('Wrong username or password.')));
     } else {
-        echo json_encode(array('loggedin'=>true, 'message'=>__('Login successful, redirecting...')));
+        echo json_encode(array('loggedin' => true, 'message' => __('Login successful, redirecting...')));
     }
 
     die();
 
-
-
 }
 
-function wooclone_ajax_user_logout() {
-    // Implement ajax function here
+function wooclone_ajax_user_logout()
+{
+    $user_logout = wp_logout();
+    if (is_wp_error( $user_logout )) {
+        echo json_encode(array('loggedout' => false, 'message' => __('Logout failed.')));
+    } else {
+        echo json_encode(array('loggedout' => true, 'message' => __('Logout successful, redirecting...')));
+    }
+
+    die();
 }
 
-function wooclone_ajax_user_register() {
-    // Implement ajax function here
+function wooclone_ajax_user_register()
+{
+    $info = array();
+    $info['user_login'] = $_POST['username'];
+    $info['user_password'] = $_POST['password'];
+    $info['remember'] = true;
+
+    $user_signon = wp_signon($info, false);
+    if (is_wp_error($user_signon)) {
+        echo json_encode(array('loggedin' => false, 'message' => __('Wrong username or password.')));
+    } else {
+        echo json_encode(array('loggedin' => true, 'message' => __('Login successful, redirecting...')));
+    }
+
+    die();
 }
-
-
-
