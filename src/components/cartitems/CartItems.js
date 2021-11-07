@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import CartTotal from '../carttotal/CartTotal';
 import { OrderList } from 'primereact/orderlist';
+import { Toast } from 'primereact/toast';
 
 import './CartItems.css';
 
@@ -9,11 +10,13 @@ import { removeFromCart, getCartItems } from '../../service/CartService';
 
 function CartItems(props) {
 
+  const toast = useRef(null);
   const checkOutPage = `${ site_url }/checkout`
   const productPage = `${ site_url }/products`
 
   const [cartItems, setCartItems] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
+
 
   useEffect(() => {
 
@@ -24,12 +27,27 @@ function CartItems(props) {
 
   }, [])
 
+  const showSuccess = (message, detail ) => {
+    toast.current.show({ severity: 'success', summary: message, detail: detail, life: 3000 });
+  }
+
+  const showWarn = ( message, detail ) => {
+    toast.current.show({ severity: 'warn', summary: message, detail: detail, life: 3000 });
+  }
+
   const handleButtonRemoveFromCart = useCallback((cartId) => {
 
-    let cartItems = removeFromCart(cartId)
+    const cartItems = removeFromCart(cartId)
+   
     const totalPrice = cartItems.reduce((acc, item) => acc + item.unitPrice, 0)
     setCartItems(cartItems)
     setTotalPrice(totalPrice)
+    
+    if(cartItems){
+      showSuccess( 'Product removed' )
+     }else{
+       showWarn('Sorry, things did not work as expected.')
+     }
 
   }, [props.x]);
 
@@ -37,6 +55,7 @@ function CartItems(props) {
   const itemTemplate = (item) => {
     return (
       <div className="product-item">
+        <Toast ref={toast} position="top-right"></Toast>
         <div className="image-container">
           <img src={item.image} onError={(e) => e.target.src = '/wp-content/uploads/2020/05/placeholder.png'} alt={item.name} />
         </div>

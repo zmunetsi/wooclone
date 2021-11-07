@@ -139,6 +139,8 @@ function wooclone_scripts() {
 	wp_enqueue_script( 'wooclone-build-script', plugins_url( '/dist/main.js', __FILE__ ), array(), WOOCLONE_VERSION, true );
 	
     $api_endpoint = get_option('wooclone_api_endpoint');
+    $current_user = wp_get_current_user();
+    $user_firstname = $current_user->user_login;
 
     wp_localize_script( 'wooclone-config-script', 'scriptParams', $script_params = array(
         'api_endpoint' => $api_endpoint,
@@ -149,8 +151,39 @@ function wooclone_scripts() {
         'version' => WOOCLONE_VERSION,
         'is_admin' => is_admin(),
         'is_user_logged_in' => is_user_logged_in(),
+        'logged_in_username' => $user_firstname,
 
     ));
 
 }
+
+function wooclone_ajax_user_login() {
+
+    $info = array();
+    $info['user_login'] = $_POST['username'];
+    $info['user_password'] = $_POST['password'];
+    $info['remember'] = true;
+
+    $user_signon = wp_signon( $info, false );
+    if ( is_wp_error($user_signon) ){
+        echo json_encode(array('loggedin'=>false, 'message'=>__('Wrong username or password.')));
+    } else {
+        echo json_encode(array('loggedin'=>true, 'message'=>__('Login successful, redirecting...')));
+    }
+
+    die();
+
+
+
+}
+
+function wooclone_ajax_user_logout() {
+    // Implement ajax function here
+}
+
+function wooclone_ajax_user_register() {
+    // Implement ajax function here
+}
+
+
 
