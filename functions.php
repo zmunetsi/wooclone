@@ -199,7 +199,6 @@ function wooclone_ajax_user_register()
 
     // Register the user
     $user_register = wp_insert_user($info, false);
-
     if (is_wp_error($user_register)) {
         echo json_encode(array('registered' => false, 'message' => __('Registration Failed.')));
     } else {

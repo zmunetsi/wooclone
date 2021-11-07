@@ -67,7 +67,7 @@ function Checkout(props) {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      firstname: '',
       lastname: '',
       username: '',
       email: '',
@@ -79,12 +79,16 @@ function Checkout(props) {
     validate: (data) => {
       let errors = {};
 
-      if (!data.name) {
-        errors.name = 'Name is required.';
+      if (!data.firstname) {
+        errors.firstname = 'Name is required.';
+      }
+
+      if (!data.lastname) {
+        errors.lastname = 'Last Name is required.';
       }
 
       if (!data.username) {
-        errors.name = 'Username is required.';
+        errors.username = 'Username is required.';
       }
 
       if (!data.email) {
@@ -96,10 +100,6 @@ function Checkout(props) {
 
       if (!data.password) {
         errors.password = 'Password is required.';
-      }
-
-      if (!data.accept) {
-        errors.accept = 'You need to agree to the terms and conditions.';
       }
 
       return errors;
@@ -143,6 +143,7 @@ function Checkout(props) {
       return errors;
     },
     onSubmit: (data) => {
+      
       setLoginFormData(data);
       setLoginShowMessage(true);
       login(data).then(response => {
@@ -240,10 +241,10 @@ function Checkout(props) {
                 <form onSubmit={formik.handleSubmit} className="p-fluid">
                   <div className="p-field">
                     <span className="p-float-label">
-                      <InputText id="name" name="name" value={formik.values.name} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
-                      <label htmlFor="name" className={classNames({ 'p-error': isFormFieldValid('name') })}>Name*</label>
+                      <InputText id="firstname" name="firstname" value={formik.values.firstname} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('firstname') })} />
+                      <label htmlFor="firstname" className={classNames({ 'p-error': isFormFieldValid('firstname') })}>First Name*</label>
                     </span>
-                    {getFormErrorMessage('name')}
+                    {getFormErrorMessage('firstname')}
                   </div>
                   <div className="p-field">
                     <span className="p-float-label">
@@ -251,6 +252,13 @@ function Checkout(props) {
                       <label htmlFor="lastname" className={classNames({ 'p-error': isFormFieldValid('lastname') })}>Last Name*</label>
                     </span>
                     {getFormErrorMessage('lastname')}
+                  </div>
+                  <div className="p-field">
+                    <span className="p-float-label">
+                      <InputText id="username" name="username" value={formik.values.username} onChange={formik.handleChange} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('username') })} />
+                      <label htmlFor="username" className={classNames({ 'p-error': isFormFieldValid('username') })}>Username*</label>
+                    </span>
+                    {getFormErrorMessage('username')}
                   </div>
                   <div className="p-field">
                     <span className="p-float-label p-input-icon-right">
@@ -296,7 +304,7 @@ function Checkout(props) {
                   <div className="p-field">
                     <span className="p-float-label p-input-icon-right">
                       <i className="pi pi-envelope" />
-                      <InputText id="username" name="username" value={loginFormik.values.username} onChange={loginFormik.handleChange} className={classNames({ 'p-invalid': isLoginFormFieldValid('username') })} />
+                      <InputText id="login-username" name="username" value={loginFormik.values.username} onChange={loginFormik.handleChange} className={classNames({ 'p-invalid': isLoginFormFieldValid('username') })} />
                       <label htmlFor="username" className={classNames({ 'p-error': isLoginFormFieldValid('username') })}>Username*</label>
                     </span>
                     {getLoginFormErrorMessage('username')}

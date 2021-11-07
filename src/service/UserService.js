@@ -28,7 +28,7 @@ export function logout() {
 		.then(data => data.json())
 }
 
-export function register() {
+export function register( data ) {
 	let formData = new FormData();
 	formData.append('firstname', data.firstname)
 	formData.append('username', data.username)
@@ -41,6 +41,6 @@ export function register() {
 			body: formData
 
 		})
-		.then(data => data.json())
+		.then(response => response.json())
 }
 
