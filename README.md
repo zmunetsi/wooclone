@@ -13,10 +13,10 @@ Getting started
 
 [Getting Started on wordpress](https://en-za.wordpress.org/download/)
 
-Create a new menu and add pages to access
 *   Download a zip file in this repo or clone and compress repo.
 *   Install plugin/zip file downloaded on running wordpress site
 *   Go to admin menu -> wooclone and setup endpoint settings
+
 use the following endpoint fot testing:
 https://my-json-server.typicode.com/zmunetsi/wooclone/products
 
@@ -25,6 +25,7 @@ The following pages will be created automatically during plugin installation:
 *   products
 *   cart
 *   checkout
+Create a new menu and add pages to access
 
 ### Attributes
 
